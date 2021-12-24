@@ -19,9 +19,10 @@ public class EntityDemo {
 
     public static void main (String...args) throws Exception {
         //
-        JSQLDemo.runScripts();
-
+        //JSQLDemo.runScripts();
         //Lets know about Entity.java an abstract class to work with:
+
+        //...
         //Feature 1: free serialization & deserialization
         Passenger passengerA = new Passenger();
         passengerA.setName("Masum");
@@ -29,6 +30,7 @@ public class EntityDemo {
         //Marshaling passenger into map:
         Map<String, Object> passDataA = passengerA.marshallingToMap(true);
         System.out.println("Serialize Passenger into Map: " + passDataA);
+
         //....
         //Reverse the previous action:
         Map<String, Object> passDataB = new HashMap<>();
@@ -40,23 +42,29 @@ public class EntityDemo {
         passengerB.unmarshallingFromMap(passDataB, true);
         System.out.println("Deserialize Passenger from Map: " + passengerB.toString());
 
+        //...
         //Feature 2: light-weight ORM (deeply rely on JDBC-Driver)
         QueryExecutor executor = createExecutor();
         Passenger myPass = new Passenger();
         myPass.setName("Wares Ahmed");
         myPass.setActive(true);
         myPass.setSex(Gender.MALE.name());
-        myPass.insert(executor); //Do the insert
-        //Retrieve from DB:
+        //Insert into DB:
+        myPass.insert(executor);
+        //Find from DB:
         List<Passenger> res = Entity.read(Passenger.class
-                , executor
-                , new Where("name").isLike("Wares"));
-        //print
-        res.stream().forEach(passenger -> System.out.println(passenger.getName()));
+                                            , executor
+                                            , new Where("name").isLike("Wares%"));
+        //print result:
+        res.stream()
+                .forEach(passenger -> {
+                    //printing Passenger Name:
+                    System.out.println(passenger.getName());
+                });
         //
     }
 
-    private static QueryExecutor createExecutor() throws SQLException {
+    public static QueryExecutor createExecutor() throws SQLException {
         Connection conn = new JDBConnection.Builder(DriverClass.MYSQL)
                 .host("localhost", "3306")
                 .database("testDB")

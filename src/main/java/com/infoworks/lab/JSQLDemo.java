@@ -8,8 +8,6 @@ import com.it.soul.lab.sql.QueryExecutor;
 import com.it.soul.lab.sql.SQLExecutor;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
