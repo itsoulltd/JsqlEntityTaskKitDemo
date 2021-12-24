@@ -1,5 +1,7 @@
 package com.infoworks.lab;
 
+import com.infoworks.lab.beans.tasks.definition.TaskStack;
+import com.infoworks.lab.beans.tasks.nuts.SimpleTask;
 import com.infoworks.lab.models.MyCustomEvent;
 import com.infoworks.lab.models.Passenger;
 import com.infoworks.lab.rest.models.Message;
@@ -64,7 +66,29 @@ public class TaskDemo {
         //
 
         //Lets know about Task.java & associate stuff:
-        //...
+        TaskStack stack = TaskStack.createSync(false);
+
+        stack.push(new SimpleTask((message1) -> {
+            Message message2 = new Message();
+            message2.setEvent(new Event().setEventType(EventType.CREATE));
+            return message2;
+        }));
+
+        stack.push(new SimpleTask((message1) -> {
+            Message message2 = new Message();
+            message2.setEvent(new Event().setEventType(EventType.ADD));
+            return message2;
+        }));
+
+        stack.push(new SimpleTask((message1) -> {
+            Message message2 = new Message();
+            message2.setEvent(new Event().setEventType(EventType.DELETE));
+            return message2;
+        }));
+
+        stack.commit(true, (message1, state) -> {
+            System.out.println("Task Done with: " + message1.toString());
+        });
     }
 
 }
