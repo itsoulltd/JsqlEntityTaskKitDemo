@@ -23,9 +23,12 @@ public class TaskDemo {
         //Message is derived from Entity.java
         Message message = new Message();
         message.setEvent(new Event()
-                .setEventType(EventType.ACTIVATE)
+                .setEventType(EventType.ADD)
                 .setUuid(UUID.randomUUID().toString())
                 .setTimestamp(String.valueOf(new Date().getTime())));
+
+        String str = Message.getJsonSerializer().writeValueAsString(message);
+        String str2 = message.toString();
         System.out.println("Message was: " + message.toString());
 
         //Custom Event:
@@ -36,6 +39,7 @@ public class TaskDemo {
                 .setUuid(UUID.randomUUID().toString())
                 .setTimestamp(String.valueOf(new Date().getTime())));
         System.out.println("Custom Event Message was: " + messageC.toString());
+
         //Now recreate Message from Json:
         String remoteJson = messageC.toString();
         Message myRemoteMessage = Message.unmarshal(Message.class, remoteJson);
@@ -89,7 +93,7 @@ public class TaskDemo {
             return message2;
         }));
 
-        stack.commit(false, (message1, state) -> {
+        stack.commit(true, (message1, state) -> {
             System.out.println("Task Done with: " + message1.toString());
         });
     }
