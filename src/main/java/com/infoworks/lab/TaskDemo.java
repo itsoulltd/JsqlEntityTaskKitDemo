@@ -71,22 +71,25 @@ public class TaskDemo {
         stack.push(new SimpleTask((message1) -> {
             Message message2 = new Message();
             message2.setEvent(new Event().setEventType(EventType.CREATE));
+            System.out.println("Task-1 " + (message1 == null ? "" : message1.getEvent().getEventType().name()));
             return message2;
         }));
 
         stack.push(new SimpleTask((message1) -> {
             Message message2 = new Message();
             message2.setEvent(new Event().setEventType(EventType.ADD));
+            System.out.println("Task-2 " + (message1 == null ? "" : message1.getEvent().getEventType().name()));
             return message2;
         }));
 
         stack.push(new SimpleTask((message1) -> {
             Message message2 = new Message();
             message2.setEvent(new Event().setEventType(EventType.DELETE));
+            System.out.println("Task-3 " + (message1 == null ? "" : message1.getEvent().getEventType().name()));
             return message2;
         }));
 
-        stack.commit(true, (message1, state) -> {
+        stack.commit(false, (message1, state) -> {
             System.out.println("Task Done with: " + message1.toString());
         });
     }

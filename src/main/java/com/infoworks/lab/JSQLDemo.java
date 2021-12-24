@@ -13,7 +13,7 @@ import java.sql.SQLException;
 
 public class JSQLDemo {
 
-    public static void main(String...args) throws SQLException {
+    public static void main(String...args) throws Exception {
         System.out.println("Start");
         runScripts();
         //Create a connection:
@@ -30,7 +30,9 @@ public class JSQLDemo {
         passenger.setName("Towhid");
         passenger.setAge(38);
         boolean inserted = passenger.insert(executor);
+        //
         System.out.println("Inserted ? " + (inserted ? "YES" : "NO"));
+        executor.close();
     }
 
     public static void runScripts() throws SQLException {
