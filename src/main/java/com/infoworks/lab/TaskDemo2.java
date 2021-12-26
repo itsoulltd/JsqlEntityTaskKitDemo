@@ -13,6 +13,7 @@ public class TaskDemo2 {
     public static void main(String...args){
         //TODO: Make a Login Task Flow:
         TaskStack loginStack = TaskStack.createSync(true);
+        loginStack.push(new CheckUserExistTask("james@gmail.com"));
         loginStack.push(new LoginTask("james@gmail.com", "432109"));
         loginStack.commit(true, (message, state) -> {
             System.out.println("Login Status: " + state.name());
@@ -31,7 +32,12 @@ public class TaskDemo2 {
                 , 32));
         regStack.push(new SendEmailTask("xbox-support@msn.com"
                 , "ahmed@yahoo.com"
+                , "Hi There! .... Greetings"
                 , "new-reg-email-temp-01"));
+        regStack.push(new SendSMSTask("01100909001"
+                , "01786987908"
+                , "Your Registration Completed! Plz check your email."
+                , "new-reg-sms-temp-01"));
         regStack.commit(true, (message, state) -> {
             System.out.println("Registration Status: " + state.name());
         });
@@ -40,9 +46,11 @@ public class TaskDemo2 {
 
         //TODO: Make a ForgetPassword Task Flow:
         TaskStack forgetPassStack = TaskStack.createSync(true);
+        forgetPassStack.push(new CheckUserExistTask("ahmed@yahoo.com"));
         forgetPassStack.push(new ForgotPasswordTask("ahmed@yahoo.com"));
         forgetPassStack.push(new SendEmailTask("xbox-noreply@msn.com"
                 , "ahmed@yahoo.com"
+                , "Hi There! .... Greetings"
                 , "forgot-pass-email-temp-01"));
         forgetPassStack.commit(true, (message, state) -> {
             System.out.println("ForgetPassword Status: " + state.name());
@@ -57,6 +65,7 @@ public class TaskDemo2 {
                 , "he-he-he-funny:)"));
         resetPassStack.push(new SendEmailTask("xbox-noreply@msn.com"
                 , "ahmed@yahoo.com"
+                , "Hi There! .... Greetings"
                 , "reset-pass-email-temp-01"));
         resetPassStack.commit(true, (message, state) -> {
             System.out.println("ResetPassword Status: " + state.name());
@@ -66,8 +75,6 @@ public class TaskDemo2 {
     ///////////////////////////////////Example Of Implementing a Task////////////////////////////
 
     public static class LoginTask extends AbstractTask<Message, Response> {
-
-        public LoginTask() {super();}
 
         public LoginTask(String username, String password) {
             super(new Property("username", username), new Property("password", password));
@@ -80,7 +87,7 @@ public class TaskDemo2 {
             String password = getPropertyValue("password").toString();
             //...
             String msg = String.format("%s : %s", username, password);
-            System.out.println("Login is Done for " + username);
+            System.out.println("Login is Successful for " + username);
             //....
             return new Response().setMessage(msg).setStatus(200);
         }
@@ -95,8 +102,6 @@ public class TaskDemo2 {
     //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static class CheckUserExistTask extends AbstractTask<Message, Response> {
-
-        public CheckUserExistTask() {super();}
 
         public CheckUserExistTask(String username) {
             super(new Property("username", username));
@@ -124,8 +129,6 @@ public class TaskDemo2 {
 
     public static class RegistrationTask extends AbstractTask<Message, Response> {
 
-        public RegistrationTask() {super();}
-
         public RegistrationTask(String username, String password, String email, String contact, Date dob, Integer age) {
             super(new Property("username", username)
                     , new Property("password", password)
@@ -145,7 +148,7 @@ public class TaskDemo2 {
             Date dob = new Date(Long.valueOf(getPropertyValue("dob").toString()));
             Integer age = Integer.valueOf(getPropertyValue("age").toString());
             //....
-            System.out.println("Registration is Done for " + username);
+            System.out.println("Registration is Successful for " + username);
             //....
             return new Response().setMessage("").setStatus(200);
         }
@@ -161,8 +164,6 @@ public class TaskDemo2 {
 
     public static class LogoutTask extends AbstractTask<Message, Response> {
 
-        public LogoutTask() {super();}
-
         public LogoutTask(String token) {
             super(new Property("token", token));
         }
@@ -172,7 +173,7 @@ public class TaskDemo2 {
             //TODO: DO THE BUSINESS LOGIC TO LOGOUT:
             String token = getPropertyValue("token").toString();
             //....
-            System.out.println("Logout is Done for " + token);
+            System.out.println("Logout is Successful for " + token);
             //....
             return new Response().setMessage("").setStatus(200);
         }
@@ -188,8 +189,6 @@ public class TaskDemo2 {
 
     public static class ForgotPasswordTask extends AbstractTask<Message, Response> {
 
-        public ForgotPasswordTask() {super();}
-
         public ForgotPasswordTask(String email) {
             super(new Property("email", email));
         }
@@ -199,7 +198,7 @@ public class TaskDemo2 {
             //TODO: DO THE BUSINESS LOGIC TO FORGOT PASSWORD:
             String email = getPropertyValue("email").toString();
             //....
-            System.out.println("Forget Pass is Done for " + email);
+            System.out.println("Forget Pass is Successful for " + email);
             //....
             return new Response().setMessage("").setStatus(200);
         }
@@ -215,8 +214,6 @@ public class TaskDemo2 {
 
     public static class ResetPasswordTask extends AbstractTask<Message, Response> {
 
-        public ResetPasswordTask() {super();}
-
         public ResetPasswordTask(String token, String oldPass, String newPass) {
             super(new Property("token", token), new Property("oldPass", oldPass), new Property("newPass", newPass));
         }
@@ -228,7 +225,7 @@ public class TaskDemo2 {
             String oldPass = getPropertyValue("oldPass").toString();
             String newPass = getPropertyValue("newPass").toString();
             //....
-            System.out.println("Reset Pass is Done for " + token);
+            System.out.println("Reset Pass is Successful for " + token);
             //....
             return new Response().setMessage("").setStatus(200);
         }
@@ -244,10 +241,11 @@ public class TaskDemo2 {
 
     public static class SendEmailTask extends AbstractTask<Message, Response> {
 
-        public SendEmailTask() {super();}
-
-        public SendEmailTask(String sender, String receiver, String templateId) {
-            super(new Property("sender", sender), new Property("receiver", receiver), new Property("templateId",templateId));
+        public SendEmailTask(String sender, String receiver, String body, String templateId) {
+            super(new Property("sender", sender)
+                    , new Property("receiver", receiver)
+                    , new Property("templateId",templateId)
+                    , new Property("body", body));
         }
 
         @Override
@@ -255,6 +253,7 @@ public class TaskDemo2 {
             //TODO: DO THE BUSINESS LOGIC TO SEND EMAIL:
             String sender = getPropertyValue("sender").toString();
             String receiver = getPropertyValue("receiver").toString();
+            String body = getPropertyValue("body").toString();
             String emailTemplateID = getPropertyValue("templateId").toString();
             //....
             System.out.println("Email Has Sent To " + receiver);
@@ -273,10 +272,8 @@ public class TaskDemo2 {
 
     public static class SendSMSTask extends SendEmailTask {
 
-        public SendSMSTask() {super();}
-
-        public SendSMSTask(String sender, String receiver, String templateId) {
-            super(sender, receiver, templateId);
+        public SendSMSTask(String sender, String receiver, String body, String templateId) {
+            super(sender, receiver, body, templateId);
         }
 
         @Override
@@ -284,6 +281,7 @@ public class TaskDemo2 {
             //TODO: DO THE BUSINESS LOGIC TO SEND SMS:
             String sender = getPropertyValue("sender").toString();
             String receiver = getPropertyValue("receiver").toString();
+            String body = getPropertyValue("body").toString();
             String smsTemplateID = getPropertyValue("templateId").toString();
             //....
             System.out.println("SMS Has Sent To " + receiver);
@@ -302,10 +300,8 @@ public class TaskDemo2 {
 
     public static class SendOTPSmsTask extends SendSMSTask {
 
-        public SendOTPSmsTask() {super();}
-
-        public SendOTPSmsTask(String sender, String receiver, String templateId) {
-            super(sender, receiver, templateId);
+        public SendOTPSmsTask(String sender, String receiver, String body, String templateId) {
+            super(sender, receiver, body, templateId);
         }
 
         @Override
@@ -313,6 +309,7 @@ public class TaskDemo2 {
             //TODO: DO THE BUSINESS LOGIC TO SEND OTP SMS:
             String sender = getPropertyValue("sender").toString();
             String receiver = getPropertyValue("receiver").toString();
+            String body = getPropertyValue("body").toString();
             String otpTemplateID = getPropertyValue("templateId").toString();
             //....
             System.out.println("OTP Has Sent To " + receiver);
@@ -330,8 +327,10 @@ public class TaskDemo2 {
     //////////////////////////////Example of a minimal Task///////////////////////////
     public static class ExampleTask extends AbstractTask<Message, Response> {
 
+        //Either override default constructor:
         public ExampleTask() {super();}
-
+        //OR
+        //Provide an custom constructor:
         public ExampleTask(String data) {
             super(new Property("data", data));
         }
