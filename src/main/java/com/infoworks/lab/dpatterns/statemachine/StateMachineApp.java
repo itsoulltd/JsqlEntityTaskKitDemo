@@ -16,24 +16,32 @@ public class StateMachineApp {
         //
         System.out.println("---------Draft & AUTHOR---------");
         docs.enter(Draft.class);
+        //OR
+        //docs.moveNext();
         docs.setUserToCurrentState(new User(Role.AUTHOR));
         docs.render();
         docs.publish();
         //
         System.out.println("---------Moderation & MODERATOR---------");
         docs.enter(Moderation.class);
+        //OR
+        //docs.moveNext();
         docs.setUserToCurrentState(new User(Role.MODERATOR));
         docs.render();
         docs.publish();
         //
         System.out.println("---------Published & PUBLISHER---------");
         docs.enter(Published.class);
+        //OR
+        //docs.moveNext();
         docs.setUserToCurrentState(new User(Role.PUBLISHER));
         docs.render();
         docs.publish();
         //
         System.out.println("---------Draft & MODERATOR---------");
         docs.enter(Draft.class);
+        //OR
+        //docs.moveNext();
         docs.setUserToCurrentState(new User(Role.MODERATOR));
         docs.render();
         docs.publish();
