@@ -3,23 +3,21 @@ package com.infoworks.lab;
 import com.infoworks.lab.models.Gender;
 import com.infoworks.lab.models.Passenger;
 import com.it.soul.lab.connect.DriverClass;
-import com.it.soul.lab.connect.JDBConnection;
 import com.it.soul.lab.sql.QueryExecutor;
-import com.it.soul.lab.sql.SQLExecutor;
 import com.it.soul.lab.sql.entity.Entity;
 import com.it.soul.lab.sql.query.models.Where;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.infoworks.lab.JSQLDemo.createExecutor;
 
 public class EntityDemo {
 
     public static void main (String...args) throws Exception {
         //
-        //JSQLDemo.runScripts();
+        JSQLDemo.runScripts(DriverClass.H2_EMBEDDED);
         //Lets know about Entity.java an abstract class to work with:
 
         //...
@@ -44,7 +42,7 @@ public class EntityDemo {
 
         //...
         //Feature 2: light-weight ORM (deeply rely on JDBC-Driver)
-        QueryExecutor executor = createExecutor();
+        QueryExecutor executor = createExecutor(DriverClass.H2_EMBEDDED);
         Passenger myPass = new Passenger();
         myPass.setName("Wares Ahmed");
         myPass.setActive(true);
@@ -62,17 +60,6 @@ public class EntityDemo {
                     System.out.println(passenger.getName());
                 });
         //
-    }
-
-    public static QueryExecutor createExecutor() throws SQLException {
-        Connection conn = new JDBConnection.Builder(DriverClass.MYSQL)
-                .host("localhost", "3306")
-                .database("testDB")
-                .credential("root","root@123")
-                .build();
-        //Create a SQL-Executor:
-        QueryExecutor executor = new SQLExecutor(conn);
-        return executor;
     }
 
 }

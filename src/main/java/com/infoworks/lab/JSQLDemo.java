@@ -15,13 +15,9 @@ public class JSQLDemo {
 
     public static void main(String...args) throws Exception {
         System.out.println("Start");
-        runScripts();
+        runScripts(DriverClass.H2_EMBEDDED);
         //Create a connection:
-        Connection conn = new JDBConnection.Builder(DriverClass.MYSQL)
-                .host("localhost", "3306")
-                .database("testDB")
-                .credential("root","root@123")
-                .build();
+        Connection conn = createConnection(DriverClass.H2_EMBEDDED);
         //
         //Create a SQL-Executor:
         QueryExecutor executor = new SQLExecutor(conn);
@@ -35,17 +31,38 @@ public class JSQLDemo {
         executor.close();
     }
 
-    public static void runScripts() throws SQLException {
+    public static void runScripts(DriverClass driverClass) throws SQLException {
         ScriptRunner runner = new ScriptRunner();
-        Connection conn = new JDBConnection.Builder(DriverClass.MYSQL)
-                .host("localhost", "3306")
-                .database("testDB")
-                .credential("root","root@123")
-                .build();
+        Connection conn = createConnection(driverClass);
         //
         File file = new File("testDB.sql");
         String[] cmds = runner.commands(runner.createStream(file));
         runner.execute(cmds, conn);
+    }
+
+    public static Connection createConnection(DriverClass driverClass) throws SQLException {
+        Connection conn;
+        if (driverClass == DriverClass.MYSQL){
+            conn = new JDBConnection.Builder(driverClass)
+                    .host("localhost", "3306")
+                    .database("testDB")
+                    .credential("root","root@123")
+                    .build();
+        }else {
+            conn = new JDBConnection.Builder(driverClass)
+                    .database("testDB")
+                    .credential("sa", "")
+                    .query(";DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE")
+                    .build();
+        }
+        return conn;
+    }
+
+    public static QueryExecutor createExecutor(DriverClass driverClass) throws SQLException {
+        Connection conn = JSQLDemo.createConnection(driverClass);
+        //Create a SQL-Executor:
+        QueryExecutor executor = new SQLExecutor(conn);
+        return executor;
     }
 
 }
