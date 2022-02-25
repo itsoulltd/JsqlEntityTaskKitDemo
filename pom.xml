@@ -55,4 +55,46 @@
         </dependency>
     </dependencies>
 
+    <!-- Assembly Plugin -->
+    <!-- ~>$ mvn clean compile assembly:single -P<profile-id> -->
+    <!-- ~>$ java -jar -D<vm-key=vm-value> ... target/abc.jar -->
+    <profiles>
+        <profile>
+            <id>MakeAnOrderFromPizzaGuy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <finalName>MakeAnOrderFromPizzaGuy-${version}</finalName>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>com.infoworks.lab.dpatterns.decorator.MakeAnOrderFromPizzaGuy</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>samples/**</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <!-- -->
+        <!-- -->
+    </profiles>
+
 </project>
