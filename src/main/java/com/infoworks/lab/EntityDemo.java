@@ -11,14 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.infoworks.lab.JSQLDemo.createExecutor;
-
 public class EntityDemo {
 
     public static void main (String...args) throws Exception {
         //
-        JSQLDemo.runScripts(DriverClass.H2_EMBEDDED);
-        //Lets know about Entity.java an abstract class to work with:
+        JSQLController.executeScripts(DriverClass.H2_EMBEDDED);
+        //Let's know about Entity.java an abstract class to work with:
 
         //...
         //Feature 1: free serialization & deserialization
@@ -42,7 +40,7 @@ public class EntityDemo {
 
         //...
         //Feature 2: light-weight ORM (deeply rely on JDBC-Driver)
-        QueryExecutor executor = createExecutor(DriverClass.H2_EMBEDDED);
+        QueryExecutor executor = JSQLController.createExecutor(DriverClass.H2_EMBEDDED);
         Passenger myPass = new Passenger();
         myPass.setName("Wares Ahmed");
         myPass.setActive(true);
