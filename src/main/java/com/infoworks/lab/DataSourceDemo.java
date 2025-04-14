@@ -176,9 +176,11 @@ public class DataSourceDemo {
 
     @Test
     public void addTest() {
+        PerformanceLogger LOG = new PerformanceLogger();
         //
         loadIntDataSource();
         System.out.println(intDataSource.size());
+        LOG.printMillis("");
         //
         System.out.println("===========================0-(datasource.size())======================");
         int maxItem = intDataSource.size();
@@ -186,16 +188,19 @@ public class DataSourceDemo {
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================1-2==========================");
         readAll = intDataSource.readSync(1, 2);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================2-3=========================");
         readAll = intDataSource.readSync(2, 3);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================0-3=========================");
         readAll = intDataSource.readSync(0, 3);
         for (Object p : readAll) {
@@ -205,7 +210,7 @@ public class DataSourceDemo {
 
     @Test
     public void additionFuncTest() {
-
+        PerformanceLogger LOG = new PerformanceLogger();
         ////When String is Key:
         SimpleDataSource<String, Person> dataSource = new SimpleDataSource<>();
 
@@ -221,6 +226,7 @@ public class DataSourceDemo {
                 .setAge(45)
                 .setGender("male"));
 
+        LOG.printMillis("");
         System.out.println("===========================0-2==========================");
         Object[] readAll = dataSource.readSync(0, 2);
         for (Object p : readAll) {
@@ -241,16 +247,17 @@ public class DataSourceDemo {
                 .setEmail("Abraham@gmail.com")
                 .setAge(45)
                 .setGender("male"));
-
+        LOG.printMillis("");
         System.out.println("===========================1-1==========================");
         Person person = intDataSource.read(intKey);
         System.out.println(person.toString());
-        //
+        LOG.printMillis("");
         System.out.println("");
     }
 
     @Test
     public void addDeleteTests() {
+        PerformanceLogger LOG = new PerformanceLogger();
         SimpleDataSource<String, Person> dataSource = new SimpleDataSource<>();
 
         Person a = new Person()
@@ -267,7 +274,7 @@ public class DataSourceDemo {
 
         if(!dataSource.contains(a)) dataSource.add(a);
         if(!dataSource.contains(b)) dataSource.add(b);
-
+        LOG.printMillis("");
         System.out.println("===========================0-2==========================");
         Object[] readAll = dataSource.readSync(0, 2);
         for (Object p : readAll) {
@@ -277,7 +284,7 @@ public class DataSourceDemo {
         System.out.println("Size before delete: " + dataSource.size());
         if(dataSource.contains(a)) dataSource.delete(a);
         System.out.println("Size after delete: " + dataSource.size());
-
+        LOG.printMillis("");
     }
 
 }
