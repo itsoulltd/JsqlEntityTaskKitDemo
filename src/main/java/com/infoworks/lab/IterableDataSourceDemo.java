@@ -2,6 +2,7 @@ package com.infoworks.lab;
 
 import com.infoworks.lab.dpatterns.datasource.IterableDataSource;
 import com.it.soul.lab.data.simple.SimpleDataSource;
+import org.junit.Test;
 
 import java.util.Arrays;
 
@@ -13,6 +14,7 @@ public class IterableDataSourceDemo {
         demo.readTest();
     }
 
+    @Test
     public void readTest() {
         PerformanceLogger LOG = new PerformanceLogger();
         //

@@ -2,6 +2,7 @@ package com.infoworks.lab;
 
 import com.infoworks.lab.models.Person;
 import com.it.soul.lab.data.simple.SimpleDataSource;
+import org.junit.Test;
 
 public class DataSourceDemo {
 
@@ -94,9 +95,12 @@ public class DataSourceDemo {
                 .setGender("male"));
     }
 
+    @Test
     public void readTest() {
+        PerformanceLogger LOG = new PerformanceLogger();
         //
         loadDataSource();
+        LOG.printMillis("");
         //
         System.out.println("===========================0-(datasource.size())======================");
         int maxItem = dataSource.size();
@@ -104,41 +108,49 @@ public class DataSourceDemo {
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================1-2==========================");
         readAll = dataSource.readSync(1, 2);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================2-3=========================");
         readAll = dataSource.readSync(2, 3);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================0-3=========================");
         readAll = dataSource.readSync(0, 3);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("===========================0-2========================");
         readAll = dataSource.readSync(0, 2);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("==========================100-10=======================");
         readAll = dataSource.readSync(100, 10);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("==========================0-0=======================");
         readAll = dataSource.readSync(0, 0);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("==========================1-0=======================");
         readAll = dataSource.readSync(1, 0);
         for (Object p : readAll) {
             System.out.println(p.toString());
         }
+        LOG.printMillis("");
         System.out.println("==========================(Asynch)===================");
         dataSource.readAsync(4, 1, (items) -> {
             System.out.println("==========================4-1=======================");
@@ -146,14 +158,14 @@ public class DataSourceDemo {
                 System.out.println(p.toString());
             }
         });
-        //
+        LOG.printMillis("");
         dataSource.readAsync(4, 2, (items) -> {
             System.out.println("==========================4-2=======================");
             for (Object p : items) {
                 System.out.println(p.toString());
             }
         });
-        //
+        LOG.printMillis("");
         dataSource.readAsync(4, 3, (items) -> {
             System.out.println("==========================4-3=======================");
             for (Object p : items) {
@@ -162,6 +174,7 @@ public class DataSourceDemo {
         });
     }
 
+    @Test
     public void addTest() {
         //
         loadIntDataSource();
@@ -190,6 +203,7 @@ public class DataSourceDemo {
         }
     }
 
+    @Test
     public void additionFuncTest() {
 
         ////When String is Key:
@@ -235,6 +249,7 @@ public class DataSourceDemo {
         System.out.println("");
     }
 
+    @Test
     public void addDeleteTests() {
         SimpleDataSource<String, Person> dataSource = new SimpleDataSource<>();
 
