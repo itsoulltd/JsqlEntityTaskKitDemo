@@ -16,7 +16,7 @@ public class IterableDataSourceDemo {
 
     @Test
     public void readTest() {
-        PerformanceLogger LOG = new PerformanceLogger();
+        PLogger LOG = new PLogger();
         //
         IterableDataSource<String> names = new IterableDataSource<>();
         names.add("Sohana");

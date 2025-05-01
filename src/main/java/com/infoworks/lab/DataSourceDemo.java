@@ -97,7 +97,7 @@ public class DataSourceDemo {
 
     @Test
     public void readTest() {
-        PerformanceLogger LOG = new PerformanceLogger();
+        PLogger LOG = new PLogger();
         //
         loadDataSource();
         LOG.printMillis("");
@@ -176,7 +176,7 @@ public class DataSourceDemo {
 
     @Test
     public void addTest() {
-        PerformanceLogger LOG = new PerformanceLogger();
+        PLogger LOG = new PLogger();
         //
         loadIntDataSource();
         System.out.println(intDataSource.size());
@@ -210,7 +210,7 @@ public class DataSourceDemo {
 
     @Test
     public void additionFuncTest() {
-        PerformanceLogger LOG = new PerformanceLogger();
+        PLogger LOG = new PLogger();
         ////When String is Key:
         SimpleDataSource<String, Person> dataSource = new SimpleDataSource<>();
 
@@ -257,7 +257,7 @@ public class DataSourceDemo {
 
     @Test
     public void addDeleteTests() {
-        PerformanceLogger LOG = new PerformanceLogger();
+        PLogger LOG = new PLogger();
         SimpleDataSource<String, Person> dataSource = new SimpleDataSource<>();
 
         Person a = new Person()
